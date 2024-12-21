@@ -56,16 +56,16 @@ body:
         attributes:
           label: Which Theme are you using?
           options:
-              - Tailwind
-              - Bootstrap 5
+              - 'Tailwind'
+              - 'Bootstrap 5'
 
     - type: dropdown
       id: published-assets
       attributes:
          label: Have you published the resource files and customized them? (php artisan vendor:publish)
          options:
-            - Yes
-            - No
+            - 'Yes'
+            - 'No'
 
       validations:
           required: true
