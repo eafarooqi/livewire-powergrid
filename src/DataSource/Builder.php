@@ -39,7 +39,12 @@ class Builder
 
     public function filter(): EloquentBuilder|QueryBuilder
     {
-        $filters = collect($this->component->filters());
+        // To make it work on export, we need to use ->filters instead of filters()
+        $filters = collect(
+            app()->runningInConsole() && !app()->runningUnitTests()
+            ? $this->component->filters
+            : $this->component->filters()
+        );
 
         if ($filters->isEmpty()) {
             return $this->query;
@@ -223,7 +228,7 @@ class Builder
                         });
                     }
                 } catch (RelationNotFoundException $e) {
-                    $query->leftJoin($nestedTable, "$table.$nestedTable" . "_id", '=', "$nestedTable.id")
+                    $query->leftJoin($nestedTable, "$table.$nestedTable" . '_id', '=', "$nestedTable.id")
                         ->orWhere(function (EloquentBuilder $query) use ($nestedTable, $nestedColumns, $search) {
                             foreach ($nestedColumns as $nestedColumn) {
                                 $search = $this->getBeforeSearchMethod($nestedColumn, $search);
